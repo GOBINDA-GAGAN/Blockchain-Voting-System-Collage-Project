@@ -1,0 +1,29 @@
+# Node.js dependencies
+node_modules/
+
+# Hardhat & Truffle build artifacts
+artifacts/
+cache/
+typechain/
+typechain-types/
+build/
+
+# dotenv environment variables
+.env
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# VS Code settings
+.vscode/
+
+# Coverage reports
+coverage/
+coverage.json
+
+# Temporary files
+*.swp
