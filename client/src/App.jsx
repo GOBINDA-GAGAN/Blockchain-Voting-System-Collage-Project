@@ -1,20 +1,19 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-} from "react-router-dom";
-import Home from "./pages/Home";
-import Navbar from "./components/Common/Navbar";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Layout from "./components/Layouts/Layouts";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
+  
+  const role = "admin";
+
   return (
     <Router>
-      <Navbar/>
+      <Layout userRole={role}>
         <Routes>
-          <Route path="/" element={<Home />} />
-          {/* Add other routes here */}
+          <Route path="/dashboard" element={<Dashboard/>}/>
         </Routes>
+      </Layout>
     </Router>
   );
 }
