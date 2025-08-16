@@ -39,10 +39,10 @@ const LoginPage = () => {
         <div className="w-full md:w-1/2 p-6 bg-gradient-to-b  from-sky-200 via-[#eae9e7] to-green-200">
           {/* Title */}
           <h2 className="text-3xl font-extrabold text-black text-center mb-2">
-            Welcome Back
+           Glad to See You !
           </h2>
           <p className="text-sm text-gray-500 text-center mb-6">
-            Please login to continue
+           Login and shape the future today.
           </p>
 
           {/* Form */}
