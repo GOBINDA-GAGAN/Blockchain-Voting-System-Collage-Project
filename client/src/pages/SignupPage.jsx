@@ -49,10 +49,10 @@ const SignupPage = () => {
         {/* Right Side - Form */}
         <div className="w-full md:w-7/12 p-6">
           <h2 className="text-2xl font-bold text-gray-800 mb-2 text-center">
-            Create Account
+            Join the Journey 🇮🇳
           </h2>
           <p className="text-sm text-gray-500 mb-4 text-center">
-            Sign up to continue your journey
+            Shape the future with your voice.
           </p>
 
           <form className="space-y-3" onSubmit={handleSubmit}>
@@ -155,7 +155,7 @@ const SignupPage = () => {
           </div>
 
           {/* Social Signup */}
-          <button className="w-full flex items-center justify-center gap-2 border border-gray-300 py-2 rounded-lg hover:bg-gray-100 transition">
+          <button className="w-full flex items-center justify-center gap-2  bg-white py-2 rounded-lg hover:bg-gray-100 transition">
             <FcGoogle size={22} />
             <span className="text-sm font-medium">Sign up with Google</span>
           </button>

@@ -127,8 +127,8 @@ const LoginPage = () => {
           </div>
 
           {/* Social Login */}
-          <button className="w-full flex items-center justify-center gap-2 border border-gray-300 py-2 rounded-lg 
-                             hover:bg-gray-100 transition font-medium text-gray-700">
+          <button className="w-full flex items-center justify-center gap-2 bg-white  hover:bg-gray-100 py-2 rounded-lg 
+                           transition font-medium text-gray-700">
             <FcGoogle size={25} />
             <span className="text-sm">Continue with Google</span>
           </button>
