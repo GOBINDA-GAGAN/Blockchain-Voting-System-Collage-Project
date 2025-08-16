@@ -6,6 +6,7 @@ import CandidateList from "./pages/CandidatesList";
 import Candidates from "./data/CandidateData";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
+import LandingPage from "./pages/LandingPage";
 
 function App() {
   const role = Candidates[0].role;
@@ -14,6 +15,7 @@ function App() {
     <Router>
       <Routes>
         {/* Public Routes */}
+        <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
 
