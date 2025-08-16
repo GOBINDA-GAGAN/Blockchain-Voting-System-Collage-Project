@@ -8,24 +8,21 @@ import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 
 function App() {
-  const role=Candidates[0].role;
-
-  
-  
+  const role = Candidates[0].role;
 
   return (
     <Router>
       <Routes>
+        {/* Public Routes */}
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
 
-          <Route path="/login" element={<LoginPage/>}/>
-          <Route path="/signup" element={<SignupPage/>}/>
+        {/* Protected / Layout Routes */}
+        <Route element={<Layout userRole={role} />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/candidates" element={<CandidateList />} />
+        </Route>
       </Routes>
-      <Layout userRole={role}>
-        <Routes>
-          <Route path="/dashboard" element={<Dashboard/>}/>
-          <Route path="/candidates" element={<CandidateList/>}/>
-        </Routes>
-      </Layout>
     </Router>
   );
 }
