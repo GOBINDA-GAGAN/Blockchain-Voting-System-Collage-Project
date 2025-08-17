@@ -2,7 +2,7 @@ const Candidates = [
   {
     _id: "66d120a5b9d2f1a3b4e50002",
     role_for_Election: "Member of Parliament (Prime Minister)",
-    role: "user", // roles: "user", "candidate", "admin"
+    role: "admin", // roles: "user", "candidate", "admin"
     email: "pm@india.gov.in",
     password: "", // usually should be hashed
     image_of_Candidate: "/candidateImage.jpeg", // replace with actual image path
