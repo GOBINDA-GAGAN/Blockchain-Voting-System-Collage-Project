@@ -2,10 +2,22 @@ import React, { useEffect, useState } from "react";
 
 const UserHeader = ({ user }) => {
   const electionDetails = {
-    year: "2025",
-    startDate: "March 1, 2025",
-    endDate: "March 15, 2025 23:59:59",
-    description: "General Election for National Assembly",
+    name: "National Assembly Election",
+    type: "General Election",
+    details: [
+      {
+        label: "Election Year",
+        value: "2025",
+      },
+      {
+        label: "Start Date",
+        value: "March 1, 2025",
+      },
+      {
+        label: "End Date",
+        value: "March 15, 2025 23:59:59",
+      },
+    ],
   };
 
   const [timeLeft, setTimeLeft] = useState({
@@ -40,52 +52,49 @@ const UserHeader = ({ user }) => {
         <h2 className="text-2xl font-bold text-purple-700 drop-shadow-sm">
           Welcome, {user.name} 👋
         </h2>
-        <p className="mt-2 text-sm text-gray-600">
-          {electionDetails.description}
-        </p>
+        <p className="mt-2 text-sm text-gray-600">{electionDetails.name}</p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-          <div className="p-4 rounded-lg shadow-sm border border-purple-300 bg-gradient-to-r from-purple-200 via-pink-200 to-blue-200">
-            <p className="text-sm text-gray-700">Election Year</p>
-            <h3 className="text-lg font-semibold text-purple-800">{electionDetails.year}</h3>
-          </div>
-          <div className="p-4 rounded-lg shadow-sm border border-purple-300 bg-gradient-to-r from-purple-200 via-pink-200 to-blue-200">
-            <p className="text-sm text-gray-700">Start Date</p>
-            <h3 className="text-lg font-semibold text-purple-800">{electionDetails.startDate}</h3>
-          </div>
-          <div className="p-4 rounded-lg shadow-sm border border-purple-300 bg-gradient-to-r from-purple-200 via-pink-200 to-blue-200">
-            <p className="text-sm text-gray-700">End Date</p>
-            <h3 className="text-lg font-semibold text-purple-800">{electionDetails.endDate}</h3>
-          </div>
-        </div>
-      </div>
-
-      {/* Right side - Countdown */}
-      <div className="mt-6 md:mt-0 md:ml-8 text-center">
-        <h3 className="text-lg font-semibold mb-2 text-purple-600">
-          ⏳ Time Left
-        </h3>
-        <div className="flex gap-3 justify-center">
-          {[
-            { label: "Days", value: timeLeft.days },
-            { label: "Hours", value: timeLeft.hours },
-            { label: "Mins", value: timeLeft.minutes },
-            { label: "Secs", value: timeLeft.seconds },
-          ].map((item, i) => (
+          {electionDetails.details.map((detail, index) => (
             <div
-              key={i}
-              className="p-3 rounded-lg shadow-sm border border-purple-300 bg-gradient-to-r from-purple-200 via-pink-200 to-blue-200"
+              key={index}
+              className="p-4 rounded-lg shadow-sm border border-purple-300 bg-gradient-to-r from-orange-100 via-white to-green-100"
             >
-              <span className="text-xl font-bold text-purple-800">
-                {item.value}
-              </span>
-              <p className="text-xs text-gray-700">{item.label}</p>
+              <p className="text-sm text-gray-700">{detail.label}</p>
+              <h3 className="text-lg font-semibold text-blue-600">
+                {detail.value}
+              </h3>
             </div>
           ))}
+        </div>
+      </div>
+      <div>
+        {/* Right side - Countdown */}
+        <div className="mt-6 md:mt-0 md:ml-8 text-center">
+          <h3 className="text-lg font-semibold mb-2 text-orange-600">
+            ⏳ Time Left
+          </h3>
+          <div className="flex gap-3 justify-center">
+            {[
+              { label: "Days", value: timeLeft.days },
+              { label: "Hours", value: timeLeft.hours },
+              { label: "Mins", value: timeLeft.minutes },
+              { label: "Secs", value: timeLeft.seconds },
+            ].map((item, i) => (
+              <div
+                key={i}
+                className="p-3 rounded-lg shadow-sm border border-purple-300 bg-gradient-to-r from-orange-100 via-white to-green-100"
+              >
+                <span className="text-xl font-bold text-blue-500">
+                  {item.value}
+                </span>
+                <p className="text-xs text-gray-700">{item.label}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
   );
 };
-
 export default UserHeader;
