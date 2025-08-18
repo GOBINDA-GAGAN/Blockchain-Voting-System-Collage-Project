@@ -17,7 +17,8 @@ const Dashboard = () => {
         <StatsCards />
       </div>
 
-      <div>
+      <div className="grid grid-cols-2">
+        <div className="bg-red-500 h-[400px]"></div>
         <div></div>
       </div>
 
