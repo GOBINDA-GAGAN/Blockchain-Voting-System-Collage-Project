@@ -1,12 +1,16 @@
 import React from "react";
+import StatsCards from "../components/StatsCards";
 
 const Dashboard = () => {
   const user = {
     name: "Alok",
   };
+
   return (
-    <div className="bg-[#EFF5F9]">
-      <h1 className="text-2xl font-bold text-gray-800">Welcome {user.name}</h1>
+    <div className="">
+      <div>
+        <StatsCards />
+      </div>
     </div>
   );
 };

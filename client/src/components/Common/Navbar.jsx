@@ -6,8 +6,8 @@ const Navbar = ({ user, onLogout }) => {
   const [modal, setModal] = useState(false);
 
   const navItems = [
-    { id: "help", icon: <FaQuestionCircle />, label: "Help" },
-    { id: "notifications", icon: <FaBell />, label: "Notifications" },
+    { id: "help", icon: <FaQuestionCircle size={20} />, label: "Help" },
+    { id: "notifications", icon: <FaBell size={20} />, label: "Notifications" },
     {
       id: "profile",
       icon: user?.profilePic ? (
@@ -17,7 +17,7 @@ const Navbar = ({ user, onLogout }) => {
           className="w-8 h-8 rounded-full object-cover"
         />
       ) : (
-        <FaUserCircle className="w-8 h-8" />
+        <FaUserCircle size={20} />
       ),
       label: user?.name || "Profile",
     },
@@ -43,7 +43,7 @@ const Navbar = ({ user, onLogout }) => {
             </button>
           ))}
         </div>
-        <div className="absolute top-20%">{modal && <ProfileCard />}</div>
+        <div className="absolute top-8">{modal && <ProfileCard />}</div>
       </div>
     </>
   );

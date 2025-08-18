@@ -13,7 +13,7 @@ const Layout = ({ userRole }) => {
         <Navbar />
 
         {/* Main Content */}
-        <main className="flex-1 bg-gray-100 p-4 overflow-auto">
+        <main className="flex-1 bg-gray-200 p-2 overflow-auto">
           <Outlet /> {/* <-- Renders child route content */}
         </main>
       </div>
