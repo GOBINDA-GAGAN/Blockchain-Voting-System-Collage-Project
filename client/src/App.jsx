@@ -7,9 +7,10 @@ import Candidates from "./data/CandidateData";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import LandingPage from "./pages/LandingPage";
+import UserManagement from "./pages/UserManagement";
 
 function App() {
-  const role = Candidates[0].role;
+  const role = Candidates[3].role;
 
   return (
     <Router>
@@ -23,6 +24,7 @@ function App() {
         <Route element={<Layout userRole={role} />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/candidates" element={<CandidateList />} />
+          <Route path="/users" element={<UserManagement />} />
         </Route>
       </Routes>
     </Router>
