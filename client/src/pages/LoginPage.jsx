@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const navigate=useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -21,6 +23,7 @@ const LoginPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Login Data:", formData);
+    navigate("/dashboard")
   };
 
   return (

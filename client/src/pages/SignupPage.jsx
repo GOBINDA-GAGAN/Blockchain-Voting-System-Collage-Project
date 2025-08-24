@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const SignupPage = () => {
   const [formData, setFormData] = useState({
@@ -12,6 +13,7 @@ const SignupPage = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const navigate= useNavigate();
 
   // Handle input changes
   const handleChange = (e) => {
@@ -32,6 +34,7 @@ const SignupPage = () => {
     }
 
     console.log("Signup Data:", formData);
+    navigate("/dashboard")
   };
 
   return (
