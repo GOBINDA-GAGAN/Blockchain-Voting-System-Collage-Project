@@ -12,6 +12,8 @@ import CandidateA4Sheet from "./CandidateA4Sheet";
 const CandidateCard = ({ candidate }) => {
   const [showModal, setShowModal] = useState(false);
   console.log(candidate.image_of_Candidate);
+  console.log(candidate.role);
+  
 
   return (
     <>
