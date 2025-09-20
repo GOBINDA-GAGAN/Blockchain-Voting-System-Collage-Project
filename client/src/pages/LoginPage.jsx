@@ -1,11 +1,14 @@
-import React, { useState } from "react";
-import { FcGoogle } from "react-icons/fc";
+import  { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+import toast from "react-hot-toast";
 
 const LoginPage = () => {
+  const { login} = useContext(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -20,14 +23,24 @@ const LoginPage = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Login Data:", formData);
-    navigate("/dashboard")
-  };
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    const res = await login(formData);
+    console.log(res);
+    
+    toast.success("Login Successfully"); 
+    navigate("/dashboard");             
+  } catch (err) {
+    toast.error(err || "Login Failed");
+    console.error("Login Error:", err.message);
+  }
+};
+
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-orange-100 via-white to-green-100">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-orange-50 via-white to-green-50">
       <div className="flex w-[90%] max-w-5xl bg-white rounded-2xl shadow-2xl overflow-hidden">
         {/* Left Side Image */}
         <div className="hidden md:flex w-1/2">
@@ -42,12 +55,11 @@ const LoginPage = () => {
         <div className="w-full md:w-1/2 p-6 bg-gradient-to-b  from-sky-200 via-[#eae9e7] to-green-200">
           {/* Title */}
           <h2 className="text-3xl font-extrabold text-black text-center mb-2">
-           Glad to See You !
+            Glad to See You !
           </h2>
           <p className="text-sm text-gray-500 text-center mb-6">
-           Login and shape the future today.
+            Login and shape the future today.
           </p>
-
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Email */}
@@ -108,7 +120,10 @@ const LoginPage = () => {
                 />
                 Remember me
               </label>
-              <a href="#" className="text-orange-600 hover:underline font-medium">
+              <a
+                href="#"
+                className="text-orange-600 hover:underline font-medium"
+              >
                 Forgot password?
               </a>
             </div>
@@ -121,20 +136,6 @@ const LoginPage = () => {
               Login
             </button>
           </form>
-
-          {/* Divider */}
-          <div className="flex items-center my-6">
-            <hr className="flex-grow border-gray-300" />
-            <span className="px-2 text-gray-500 text-sm">OR</span>
-            <hr className="flex-grow border-gray-300" />
-          </div>
-
-          {/* Social Login */}
-          <button className="w-full flex items-center justify-center gap-2 bg-white  hover:bg-gray-100 py-2 rounded-lg 
-                           transition font-medium text-gray-700">
-            <FcGoogle size={25} />
-            <span className="text-sm">Continue with Google</span>
-          </button>
 
           {/* Signup Link */}
           <p className="mt-6 text-sm text-center text-gray-600">

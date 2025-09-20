@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { Navigate, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
+import toast from "react-hot-toast";
 
 const SignupPage = () => {
+  const { signup } = useContext(AuthContext);
   const [formData, setFormData] = useState({
-    fullName: "",
+    name: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -13,7 +16,7 @@ const SignupPage = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const navigate= useNavigate();
+  const navigate = useNavigate();
 
   // Handle input changes
   const handleChange = (e) => {
@@ -25,17 +28,20 @@ const SignupPage = () => {
   };
 
   // Handle form submit
-  const handleSubmit = (e) => {
-    e.preventDefault();
+ const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
-      return;
-    }
+  try {
+    const res = await signup(formData);
+    console.log(res.message);          // log success message
+    toast.success("Register Successfully");
+    navigate("/login");
+  } catch (err) {
+    toast.error(err.response?.data?.message || "Register Failed"); // use err here
+    console.error("Register Error:", err);
+  }
+};
 
-    console.log("Signup Data:", formData);
-    navigate("/dashboard")
-  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-orange-100 via-white to-green-100">
@@ -47,7 +53,7 @@ const SignupPage = () => {
             alt="Signup Illustration"
             className="w-full  object-center"
           />
-        </div>
+        </div> 
 
         {/* Right Side - Form */}
         <div className="w-full md:w-7/12 p-6">
@@ -66,8 +72,8 @@ const SignupPage = () => {
               </label>
               <input
                 type="text"
-                name="fullName"
-                value={formData.fullName}
+                name="name"
+                value={formData.name}
                 onChange={handleChange}
                 placeholder="Enter your name"
                 required
@@ -149,20 +155,6 @@ const SignupPage = () => {
               Sign Up
             </button>
           </form>
-
-          {/* Divider */}
-          <div className="flex items-center my-4">
-            <hr className="flex-grow border-gray-300" />
-            <span className="px-2 text-gray-500 text-sm">OR</span>
-            <hr className="flex-grow border-gray-300" />
-          </div>
-
-          {/* Social Signup */}
-          <button className="w-full flex items-center justify-center gap-2  bg-white py-2 rounded-lg hover:bg-gray-100 transition">
-            <FcGoogle size={22} />
-            <span className="text-sm font-medium">Sign up with Google</span>
-          </button>
-
           {/* Link to Login */}
           <p className="mt-4 text-sm text-center text-gray-600">
             Already have an account?{" "}

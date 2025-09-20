@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import {
   FaHome,
@@ -13,33 +13,31 @@ import {
   FaTools,
 } from "react-icons/fa";
 import Logo from "/Logo.png";
+import { AuthContext } from "../../context/AuthContext"; // ✅ import context
+import { Shield } from "lucide-react";
 
 const menuConfig = {
   user: [
     { label: "Dashboard", icon: <FaHome />, path: "/dashboard" },
     { label: "Cast Vote", icon: <FaVoteYea />, path: "/vote" },
     { label: "Candidate List", icon: <FaListUl />, path: "/candidates" },
-    { label: "My Vote History", icon: <FaChartBar />, path: "/history" },
     { label: "Announcements", icon: <FaBullhorn />, path: "/announcements" },
     { label: "Profile Settings", icon: <FaUserEdit />, path: "/settings" },
   ],
- candidate: [
-  { label: "Dashboard", icon: <FaHome />, path: "/dashboard" },
-  { label: "Cast Vote", icon: <FaVoteYea />, path: "/vote" },
-  { label: "Apply for Candidate", icon: <FaUserTie />, path: "/apply-candidate" },
-  { label: "Candidate List", icon: <FaListUl />, path: "/candidates" },
-  { label: "My Vote History", icon: <FaChartBar />, path: "/history" },
-  { label: "My Profile", icon: <FaUserEdit />, path: "/my-profile" },
-  { label: "Election Results", icon: <FaChartBar />, path: "/results" },
-  { label: "Announcements", icon: <FaBullhorn />, path: "/announcements" },
-  { label: "Profile Settings", icon: <FaUserEdit />, path: "/settings" },
-],
+  candidate: [
+    { label: "Dashboard", icon: <FaHome />, path: "/dashboard" },
+    { label: "Cast Vote", icon: <FaVoteYea />, path: "/vote" },
+    { label: "Candidate List", icon: <FaListUl />, path: "/candidates" },
+    { label: "My Profile", icon: <FaUserEdit />, path: "/my-profile" },
+    { label: "Election Results", icon: <FaChartBar />, path: "/results" },
+    { label: "Announcements", icon: <FaBullhorn />, path: "/announcements" },
+    { label: "Profile Settings", icon: <FaUserEdit />, path: "/settings" },
+  ],
   admin: [
     { label: "Dashboard", icon: <FaHome />, path: "/dashboard" },
     { label: "Cast Vote", icon: <FaVoteYea />, path: "/vote" },
     { label: "Candidate List", icon: <FaListUl />, path: "/candidates" },
-    { label: "My Vote History", icon: <FaChartBar />, path: "/history" },
-     { label: "My Profile", icon: <FaUserEdit />, path: "/my-profile" },
+    { label: "My Profile", icon: <FaUserEdit />, path: "/my-profile" },
     { label: "Election Results", icon: <FaChartBar />, path: "/results" },
     { label: "Manage Users", icon: <FaUsers />, path: "/users" },
     {
@@ -47,7 +45,11 @@ const menuConfig = {
       icon: <FaUserTie />,
       path: "/manage-candidates",
     },
-    { label: "Manage Elections", icon: <FaCalendarAlt />, path: "/elections" },
+    {
+      label: "Manage Elections",
+      icon: <FaCalendarAlt />,
+      path: "/manage-election",
+    },
     { label: "View Results", icon: <FaChartBar />, path: "/results" },
     { label: "Announcements", icon: <FaBullhorn />, path: "/announcements" },
     { label: "Profile Settings", icon: <FaUserEdit />, path: "/settings" },
@@ -56,20 +58,15 @@ const menuConfig = {
 };
 
 const Sidebar = ({ userRole }) => {
+  const { logout } = useContext(AuthContext);
   const menuItems = menuConfig[userRole] || [];
 
   return (
     <div className="h-full w-64 bg-[#F0F5F9] text-black flex flex-col">
       {/* Logo */}
-      <div className="flex items-center justify-center  border-b border-gray-300">
-        <img
-          src={Logo}
-          alt="Government of India Logo"
-          className="h-16 w-auto object-contain"
-        />
-        <span className="text-xs font-bold text-gray-800 tracking-wide">
-          GOVERNMENT OF INDIA
-        </span>
+      <div className="flex items-center space-x-2 mt-6 p-2">
+        <Shield className="h-8 w-8 text-blue-600" />
+        <span className="text-xl font-bold text-gray-900">VoteSecure</span>
       </div>
 
       {/* Menu */}
@@ -87,8 +84,11 @@ const Sidebar = ({ userRole }) => {
       </nav>
 
       {/* Logout */}
-      <div className="p-3 border-r border-t  border-gray-300">
-        <button className="w-full bg-red-500 hover:bg-red-600 px-3 py-1.5 text-sm rounded-md">
+      <div className="p-3 border-r border-t border-gray-300">
+        <button
+          onClick={logout} // ✅ logs out user
+          className="w-full bg-red-500 hover:bg-red-600 px-3 py-1.5 text-sm rounded-md text-white"
+        >
           Logout
         </button>
       </div>

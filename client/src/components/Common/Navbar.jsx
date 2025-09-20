@@ -1,26 +1,12 @@
 import React, { useState } from "react";
-import { FaBell, FaUserCircle, FaQuestionCircle } from "react-icons/fa";
-import ProfileCard from "../ProfileCard";
+import { FaBell,  FaQuestionCircle } from "react-icons/fa";
 
-const Navbar = ({ user, onLogout }) => {
-  const [modal, setModal] = useState(false);
+
+const Navbar = ({ user }) => {
 
   const navItems = [
     { id: "help", icon: <FaQuestionCircle size={20} />, label: "Help" },
     { id: "notifications", icon: <FaBell size={20} />, label: "Notifications" },
-    {
-      id: "profile",
-      icon: user?.profilePic ? (
-        <img
-          src={user.profilePic}
-          alt="Profile"
-          className="w-8 h-8 rounded-full object-cover"
-        />
-      ) : (
-        <FaUserCircle size={20} />
-      ),
-      label: user?.name || "Profile",
-    },
   ];
 
   return (
@@ -35,7 +21,6 @@ const Navbar = ({ user, onLogout }) => {
               onClick={() => {
                 if (item.id === "help") alert("Help clicked");
                 if (item.id === "notifications") alert("Notifications clicked");
-                if (item.id === "profile") setModal(!modal);
               }}
             >
               {item.icon}
@@ -43,7 +28,6 @@ const Navbar = ({ user, onLogout }) => {
             </button>
           ))}
         </div>
-        <div className="absolute top-8">{modal && <ProfileCard />}</div>
       </div>
     </>
   );

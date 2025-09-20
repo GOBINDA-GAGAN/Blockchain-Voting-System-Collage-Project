@@ -1,4 +1,3 @@
-import React from "react";
 import StatsCards from "../components/StatsCards";
 import UserHeader from "../components/UserHeader";
 import PartyGraph from "../components/PartyGraph";

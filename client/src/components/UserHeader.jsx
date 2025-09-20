@@ -46,7 +46,7 @@ const UserHeader = ({ user }) => {
   }, []);
 
   return (
-    <div className="border border-purple-500 text-gray-800 bg-white/70 backdrop-blur-md rounded-2xl shadow-lg p-6 mb-6 flex flex-col md:flex-row justify-between items-center">
+    <div className="border border-purple-500 -z-30 text-gray-800 bg-white/70 backdrop-blur-md rounded-2xl shadow-lg p-6 mb-6 flex flex-col md:flex-row justify-between items-center">
       {/* Left side */}
       <div>
         <h2 className="text-2xl font-bold text-purple-700 drop-shadow-sm">
