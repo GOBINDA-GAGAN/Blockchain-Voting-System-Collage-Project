@@ -10,15 +10,18 @@ const userSchema = new mongoose.Schema(
     },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-
+    hasVoted: {
+      type: Boolean,
+      default: false,
+    },
     image: {
       type: String,
       default:
         "https://cdn.dribbble.com/userupload/29736698/file/original-1ef955c551eede8401da24a210ad3a86.jpg?resize=752x&vertical=center",
     },
-    mobile:{
-      type:String,
-      default:null
+    mobile: {
+      type: String,
+      default: null,
     },
     name: {
       type: String,
@@ -26,7 +29,6 @@ const userSchema = new mongoose.Schema(
     },
     age: { type: Number },
     gender: { type: String, enum: ["Male", "Female", "Other"] },
-    phone: { type: String },
     address: {
       village: String,
       district: String,

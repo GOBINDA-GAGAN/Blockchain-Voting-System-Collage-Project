@@ -1,165 +1,96 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import axios from "axios";
 
-const CollegeElectionResultsMotion = () => {
-  const winners = [
-    {
-      id: 1,
-      name: "Riya Sharma",
-      position: "President",
-      party: "Campus Unity",
-      votes: 540,
-      image: "https://randomuser.me/api/portraits/women/44.jpg",
-    },
-    {
-      id: 2,
-      name: "Arjun Singh",
-      position: "Vice President",
-      party: "Youth First",
-      votes: 480,
-      image: "https://randomuser.me/api/portraits/men/46.jpg",
-    },
-    {
-      id: 3,
-      name: "Neha Patel",
-      position: "Secretary",
-      party: "Green Campus",
-      votes: 420,
-      image: "https://randomuser.me/api/portraits/women/47.jpg",
-    },
-  ];
+const CollegeElectionWinnerCard = () => {
+  const [winner, setWinner] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const maxVotes = Math.max(...winners.map((c) => c.votes));
+  const API_URL = "http://localhost:5000/api/candidates"; // your backend
 
-  const cardVariants = {
-    hidden: { y: 200, opacity: 0 },
-    visible: (custom) => ({
-      y: 0,
-      opacity: 1,
-      transition: { type: "spring", stiffness: 120, delay: custom * 0.3 },
-    }),
+  useEffect(() => {
+    fetchWinner();
+  }, []);
+
+  const fetchWinner = async () => {
+    try {
+      const res = await axios.get(API_URL);
+      if (res.data.candidates && res.data.candidates.length > 0) {
+        const sorted = res.data.candidates.sort(
+          (a, b) => b.votes.length - a.votes.length
+        );
+        setWinner(sorted[0]); // pick only the top candidate
+      }
+    } catch (err) {
+      console.error("Error fetching winner", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
+  if (loading)
+    return (
+      <div className="h-screen flex items-center justify-center text-2xl font-bold">
+        Loading Winner...
+      </div>
+    );
+
+  if (!winner)
+    return (
+      <div className="h-screen flex items-center justify-center text-2xl font-bold">
+        No Winner Found
+      </div>
+    );
+
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-6">
-      <h1 className="text-3xl font-bold text-indigo-700 mb-10">
-        🏫 College Election Final Results
-      </h1>
-
-      <div className="flex items-end gap-8">
-        {/* Vice President - left */}
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-100 flex items-center justify-center p-6">
+      <motion.div
+        className="bg-white shadow-2xl rounded-3xl p-6 flex flex-col items-center w-80 backdrop-blur-md border border-white/30"
+        initial={{ y: 200, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ type: "spring", stiffness: 120 }}
+      >
+        {/* Crown */}
         <motion.div
-          className="flex flex-col items-center"
-          custom={0}
-          initial="hidden"
-          animate="visible"
-          variants={cardVariants}
-          whileHover={{ scale: 1.05 }}
+          className="text-5xl mb-2"
+          animate={{ y: [-10, 0, -10] }}
+          transition={{ repeat: Infinity, duration: 2 }}
         >
-          <div className="w-36 h-48 rounded-xl overflow-hidden shadow-lg relative">
-            <img
-              src={winners[1].image}
-              alt={winners[1].name}
-              className="w-full h-full object-cover"
-            />
-            <span className="absolute top-2 left-2 bg-yellow-400 text-white px-2 py-1 rounded-full text-xs font-semibold">
-              {winners[1].position}
-            </span>
-          </div>
-          <div className="text-center mt-2">
-            <h3 className="text-lg font-semibold">{winners[1].name}</h3>
-            <p className="text-gray-500">{winners[1].party}</p>
-            <motion.div
-              className="w-32 h-4 bg-gray-300 rounded-full mt-2 overflow-hidden"
-              initial={{ width: 0 }}
-              animate={{ width: `${(winners[1].votes / maxVotes) * 100}%` }}
-              transition={{ duration: 1.5, ease: "easeOut" }}
-            >
-              <div className="h-full bg-blue-500 rounded-full"></div>
-            </motion.div>
-            <p className="text-yellow-600 font-medium mt-1">{winners[1].votes} votes</p>
-          </div>
+          👑
         </motion.div>
 
-        {/* President - middle */}
-        <motion.div
-          className="flex flex-col items-center -mb-10"
-          custom={2}
-          initial="hidden"
-          animate="visible"
-          variants={cardVariants}
-          whileHover={{ scale: 1.1 }}
-        >
-          <div className="w-52 h-64 rounded-xl overflow-hidden shadow-2xl border-4 border-green-500 relative">
-            <img
-              src={winners[0].image}
-              alt={winners[0].name}
-              className="w-full h-full object-cover"
-            />
-            <span className="absolute top-2 left-2 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-bold">
-              {winners[0].position}
-            </span>
-          </div>
-          <div className="text-center mt-3">
-            <h2 className="text-2xl md:text-3xl font-bold text-green-600">
-              {winners[0].name}
-            </h2>
-            <p className="text-gray-500">{winners[0].party}</p>
-            <motion.div
-              className="w-40 h-5 bg-gray-300 rounded-full mt-2 overflow-hidden"
-              initial={{ width: 0 }}
-              animate={{ width: `${(winners[0].votes / maxVotes) * 100}%` }}
-              transition={{ duration: 1.5, ease: "easeOut" }}
-            >
-              <div className="h-full bg-green-500 rounded-full"></div>
-            </motion.div>
-            <p className="text-yellow-600 font-semibold mt-1">{winners[0].votes} votes</p>
-          </div>
-        </motion.div>
+        {/* Profile Image */}
+        <img
+          src={
+            winner.image_of_Candidate
+              ? `http://localhost:5000${winner.image_of_Candidate}`
+              : "https://via.placeholder.com/150"
+          }
+          alt={winner.name?.firstName}
+          className="w-32 h-32 rounded-full object-cover border-4 border-yellow-400"
+        />
 
-        {/* Secretary - right */}
-        <motion.div
-          className="flex flex-col items-center"
-          custom={1}
-          initial="hidden"
-          animate="visible"
-          variants={cardVariants}
-          whileHover={{ scale: 1.05 }}
-        >
-          <div className="w-32 h-44 rounded-xl overflow-hidden shadow-lg relative">
-            <img
-              src={winners[2].image}
-              alt={winners[2].name}
-              className="w-full h-full object-cover"
-            />
-            <span className="absolute top-2 left-2 bg-red-400 text-white px-2 py-1 rounded-full text-xs font-semibold">
-              {winners[2].position}
-            </span>
-          </div>
-          <div className="text-center mt-2">
-            <h3 className="text-lg font-semibold">{winners[2].name}</h3>
-            <p className="text-gray-500">{winners[2].party}</p>
-            <motion.div
-              className="w-28 h-4 bg-gray-300 rounded-full mt-2 overflow-hidden"
-              initial={{ width: 0 }}
-              animate={{ width: `${(winners[2].votes / maxVotes) * 100}%` }}
-              transition={{ duration: 1.5, ease: "easeOut" }}
-            >
-              <div className="h-full bg-red-500 rounded-full"></div>
-            </motion.div>
-            <p className="text-yellow-600 font-medium mt-1">{winners[2].votes} votes</p>
-          </div>
-        </motion.div>
-      </div>
+        {/* Name & Role */}
+        <h2 className="mt-4 text-2xl font-bold text-indigo-900 text-center">
+          {winner.name?.firstName} {winner.name?.lastName}
+        </h2>
+        <p className="text-gray-600 text-sm mt-1">{winner.role_for_Election}</p>
 
-      {/* Podium Base */}
-      <div className="flex justify-center mt-6 gap-10">
-        <div className="w-36 h-4 bg-gray-400 rounded-t-md"></div>
-        <div className="w-52 h-6 bg-gray-400 rounded-t-md"></div>
-        <div className="w-32 h-3 bg-gray-400 rounded-t-md"></div>
-      </div>
+        {/* Votes */}
+        <div className="w-full bg-gray-300 h-4 rounded-full mt-4 overflow-hidden">
+          <motion.div
+            initial={{ width: 0 }}
+            animate={{ width: "100%" }}
+            transition={{ duration: 1.5, ease: "easeOut" }}
+            className="h-full bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-full"
+          />
+        </div>
+        <p className="text-yellow-600 font-semibold mt-2 text-lg">
+          {winner.votes.length} votes
+        </p>
+      </motion.div>
     </div>
   );
 };
 
-export default CollegeElectionResultsMotion;
+export default CollegeElectionWinnerCard;

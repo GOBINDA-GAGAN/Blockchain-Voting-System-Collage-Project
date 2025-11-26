@@ -102,6 +102,51 @@ export const getAllUsers = async (req, res) => {
   });
 };
 
+export const getCurrentUser = async (req, res) => {
+  try {
+    const userId = req.user.id; 
+    const user = await UserModel.findById(userId).select("-password"); 
+    if (!user) return res.status(404).json({ success: false, message: "User not found" });
+
+    res.status(200).json({ success: true, user });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+export const updateUserProfile = async (req, res) => {
+  try {
+    const user = await UserModel.findById(req.user.id);
+    if (!user) return res.status(404).json({ success: false, message: "User not found" });
+
+    const {
+      name,
+      age,
+      gender,
+      phone,
+      mobile,
+      address,
+      image,
+    } = req.body;
+
+    if (name) user.name = name;
+    if (age) user.age = age;
+    if (gender) user.gender = gender;
+    if (phone) user.phone = phone;
+    if (mobile) user.mobile = mobile;
+    if (image) user.image = image;
+    if (address) user.address = { ...user.address, ...address };
+
+    await user.save();
+
+    res.status(200).json({ success: true, user });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
 export const logout = async (req, res) => {
   try {
     // Clear the token cookie

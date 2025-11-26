@@ -22,7 +22,8 @@ const menuConfig = {
     { label: "Cast Vote", icon: <FaVoteYea />, path: "/vote" },
     { label: "Candidate List", icon: <FaListUl />, path: "/candidates" },
     { label: "Announcements", icon: <FaBullhorn />, path: "/announcements" },
-    { label: "Profile Settings", icon: <FaUserEdit />, path: "/settings" },
+    { label: "View Results", icon: <FaChartBar />, path: "/results" },
+    { label: "My Profile", icon: <FaUserEdit />, path: "/my-profile" },
   ],
   candidate: [
     { label: "Dashboard", icon: <FaHome />, path: "/dashboard" },
@@ -40,20 +41,16 @@ const menuConfig = {
     { label: "My Profile", icon: <FaUserEdit />, path: "/my-profile" },
     { label: "Election Results", icon: <FaChartBar />, path: "/results" },
     { label: "Manage Users", icon: <FaUsers />, path: "/users" },
-    {
-      label: "Manage Candidates",
-      icon: <FaUserTie />,
-      path: "/manage-candidates",
-    },
+    { label: "Announcements", icon: <FaBullhorn />, path: "/announcements" },
     {
       label: "Manage Elections",
       icon: <FaCalendarAlt />,
       path: "/manage-election",
     },
     { label: "View Results", icon: <FaChartBar />, path: "/results" },
-    { label: "Announcements", icon: <FaBullhorn />, path: "/announcements" },
-    { label: "Profile Settings", icon: <FaUserEdit />, path: "/settings" },
-    { label: "System Settings", icon: <FaTools />, path: "/system" },
+ 
+
+
   ],
 };
 

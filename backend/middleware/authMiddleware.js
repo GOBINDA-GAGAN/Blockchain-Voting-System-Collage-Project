@@ -16,7 +16,6 @@ export const authMiddleware = (req, res, next) => {
       "gv_ByL5jjddmCa_bffT1jgvkRSzFZMztoa2IClqbsBg"
     );
 
-    console.log("Decoded JWT:", decoded);
 
     // 3️⃣ Attach user payload to req
     req.user = decoded;

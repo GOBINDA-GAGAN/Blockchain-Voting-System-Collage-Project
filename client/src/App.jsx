@@ -11,13 +11,16 @@ import LandingPage from "./pages/LandingPage";
 import UserManagement from "./pages/UserManagement";
 import ManageElection from "./pages/ManageElection";
 import CastVote from "./pages/CastVote";
-import Profile from "./pages/Profile";
+import Profile from "./pages/UserProfileCard";
 import CollegeElectionResults from "./pages/CollegeElectionResults";
+import Announcements from "./pages/Announcement";
+import UserProfileCard from "./pages/UserProfileCard";
 
 function App() {
   const { user } = useContext(AuthContext);
   const role = user?.role || "user"; 
-
+  
+  
   return (
       <Routes>
         {/* Public */}
@@ -30,7 +33,9 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/candidates" element={<CandidateList />} />
           <Route path="/vote" element={<CastVote />} />
-          <Route path="/my-profile" element={<Profile/>} />
+          <Route path="/my-profile" element={<UserProfileCard/>} />
+          <Route path="/announcements" element={<Announcements/>} />
+          <Route path="/results" element={<CollegeElectionResults />} />
 
           {/* Only Admin can access */}
           {role === "admin" && (

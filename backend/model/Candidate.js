@@ -2,27 +2,34 @@ import mongoose from "mongoose";
 
 const candidateSchema = new mongoose.Schema(
   {
-    role_for_Election: { type: String, required: true }, 
+    role_for_Election: { type: String, required: true },
 
-
-    role: { type: String, enum: ["user", "candidate", "admin"], default: "candidate" },
+    role: {
+      type: String,
+      enum: ["user", "candidate", "admin"],
+      default: "candidate",
+    },
 
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
 
-    image_of_Candidate: { type: String }, 
+    image_of_Candidate: { type: String },
 
     name: {
       firstName: { type: String, required: true },
       lastName: { type: String },
     },
+    hasVoted: {
+      type: Boolean,
+      default: false,
+    },
 
-    department: String, 
-    year: String,       
+    department: String,
+    year: String,
     age: Number,
     gender: String,
 
-    manifesto: [String], 
+    manifesto: [String],
 
     contact: {
       email: String,
@@ -35,8 +42,17 @@ const candidateSchema = new mongoose.Schema(
       default: "Pending",
     },
 
-    votes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-    totalVotes: { type: Number, default: 0 },
+    votes: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+
+    totalVotes: {
+      type: Number,
+      default: 0,
+    },
 
     status: { type: String, enum: ["Active", "Inactive"], default: "Active" },
   },
@@ -46,6 +62,3 @@ const candidateSchema = new mongoose.Schema(
 const Candidate = mongoose.model("Candidate", candidateSchema);
 
 export default Candidate;
-
-
-

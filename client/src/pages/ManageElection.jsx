@@ -1,8 +1,6 @@
 // src/pages/ManageElection.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { FaTimes } from "react-icons/fa";
-import CandidateA4Sheet from "../components/CandidateA4Sheet";
 
 const API_URL = "http://localhost:5000/api/candidates"; // backend base URL
 
@@ -19,17 +17,14 @@ const ManageElection = () => {
     gender: "",
     manifesto: "",
     contact: { email: "", phone: "" },
+    photo: null,
   });
   const [editingCandidate, setEditingCandidate] = useState(null);
-  const [viewCandidate, setViewCandidate] = useState(false);
-  const [viewCandidateId, setViewCandidateID] = useState(null);
-  const [LoadingView, setLoadingView] = useState(false);
 
-  // Dropdown options
   const roles = ["President", "Vice President", "Secretary", "Treasurer"];
   const departments = ["CSE", "ECE", "EEE", "ME", "CE", "IT", "MBA"];
 
-  // Fetch all candidates
+  // Fetch candidates
   const fetchCandidates = async () => {
     try {
       const res = await axios.get(API_URL);
@@ -43,31 +38,32 @@ const ManageElection = () => {
     fetchCandidates();
   }, []);
 
-  const fetchCandidateById = async (id) => {
-    try {
-      const res = await axios.get(`${API_URL}/${id}`);
-      return res.data.candidate;
-    } catch (err) {
-      console.error(err);
-      return null;
-    }
-  };
-
-  // Add or Edit candidate
+  // Add/Edit Candidate
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const fd = new FormData();
+      fd.append("role_for_Election", form.role_for_Election);
+      fd.append("email", form.email);
+      if (!editingCandidate) fd.append("password", form.password);
+      fd.append("department", form.department);
+      fd.append("year", form.year);
+      fd.append("age", form.age);
+      fd.append("gender", form.gender);
+      fd.append("manifesto", form.manifesto); // send as string, backend splits by ","
+      fd.append("firstName", form.name.firstName);
+      fd.append("lastName", form.name.lastName);
+      fd.append("contactEmail", form.contact.email);
+      fd.append("contactPhone", form.contact.phone);
+      if (form.photo) fd.append("photo", form.photo);
+
       if (editingCandidate) {
-        // Update candidate
-        await axios.put(`${API_URL}/${editingCandidate._id}`, {
-          ...form,
-          manifesto: form.manifesto.split(","),
+        await axios.put(`${API_URL}/${editingCandidate._id}`, fd, {
+          headers: { "Content-Type": "multipart/form-data" },
         });
       } else {
-        // Add new candidate
-        await axios.post(API_URL, {
-          ...form,
-          manifesto: form.manifesto.split(","),
+        await axios.post(API_URL, fd, {
+          headers: { "Content-Type": "multipart/form-data" },
         });
       }
 
@@ -82,15 +78,16 @@ const ManageElection = () => {
         gender: "",
         manifesto: "",
         contact: { email: "", phone: "" },
+        photo: null,
       });
       setEditingCandidate(null);
       fetchCandidates();
     } catch (err) {
       console.error(err);
+      alert(err.response?.data?.message || "Error creating/updating candidate");
     }
   };
 
-  // Delete candidate
   const handleDelete = async (id) => {
     try {
       await axios.delete(`${API_URL}/${id}`);
@@ -100,55 +97,34 @@ const ManageElection = () => {
     }
   };
 
-  const handleView = async (id) => {
-    setLoadingView(true);
-    const candidate = await fetchCandidateById(id);
-    setViewCandidate(true);
-    setViewCandidateID(candidate);
-    setLoadingView(false);
-  };
-
-  // Dashboard counts
-  const totalCandidates = candidates.length;
-  const verifiedCount = candidates.filter(
-    (c) => c.applicationStatus === "Verified"
-  ).length;
-  const pendingCount = candidates.filter(
-    (c) => c.applicationStatus === "Pending"
-  ).length;
-
-  // Fill form for edit
   const handleEdit = (candidate) => {
     setEditingCandidate(candidate);
     setForm({
-      ...candidate,
+      role_for_Election: candidate.role_for_Election || "",
+      email: candidate.email || "",
+      password: "",
+      name: {
+        firstName: candidate.name.firstName,
+        lastName: candidate.name.lastName,
+      },
+      department: candidate.department || "",
+      year: candidate.year || "",
+      age: candidate.age || "",
+      gender: candidate.gender || "",
       manifesto: candidate.manifesto ? candidate.manifesto.join(",") : "",
+      contact: {
+        email: candidate.contact?.email || "",
+        phone: candidate.contact?.phone || "",
+      },
+      photo: null,
     });
   };
-  console.log(viewCandidateId);
 
   return (
     <div className="p-8 bg-gray-100 min-h-screen">
-      {/* Title */}
       <h1 className="text-4xl font-extrabold text-gray-800 mb-8 text-center">
         🎓 Manage College Elections
       </h1>
-
-      {/* Dashboard Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
-        <div className="bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-2xl shadow-lg p-6 flex flex-col items-center">
-          <h2 className="text-lg font-semibold">Total Candidates</h2>
-          <p className="text-3xl font-bold mt-2">{totalCandidates}</p>
-        </div>
-        <div className="bg-gradient-to-r from-green-500 to-green-700 text-white rounded-2xl shadow-lg p-6 flex flex-col items-center">
-          <h2 className="text-lg font-semibold">Verified</h2>
-          <p className="text-3xl font-bold mt-2">{verifiedCount}</p>
-        </div>
-        <div className="bg-gradient-to-r from-yellow-400 to-yellow-600 text-white rounded-2xl shadow-lg p-6 flex flex-col items-center">
-          <h2 className="text-lg font-semibold">Pending</h2>
-          <p className="text-3xl font-bold mt-2">{pendingCount}</p>
-        </div>
-      </div>
 
       {/* Add/Edit Candidate Form */}
       <div className="bg-white p-6 rounded-2xl shadow-lg mb-10">
@@ -159,7 +135,7 @@ const ManageElection = () => {
           onSubmit={handleSubmit}
           className="grid grid-cols-1 md:grid-cols-2 gap-6"
         >
-          {/* Role dropdown */}
+          {/* Role */}
           <select
             value={form.role_for_Election}
             onChange={(e) =>
@@ -176,7 +152,7 @@ const ManageElection = () => {
             ))}
           </select>
 
-          {/* First name */}
+          {/* First Name */}
           <input
             type="text"
             placeholder="First Name"
@@ -191,7 +167,7 @@ const ManageElection = () => {
             required
           />
 
-          {/* Last name */}
+          {/* Last Name */}
           <input
             type="text"
             placeholder="Last Name"
@@ -205,7 +181,7 @@ const ManageElection = () => {
             className="border p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
           />
 
-          {/* Department dropdown */}
+          {/* Department */}
           <select
             value={form.department}
             onChange={(e) => setForm({ ...form, department: e.target.value })}
@@ -220,7 +196,7 @@ const ManageElection = () => {
             ))}
           </select>
 
-          {/* Other inputs */}
+          {/* Email */}
           <input
             type="email"
             placeholder="Email"
@@ -229,6 +205,8 @@ const ManageElection = () => {
             className="border p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
             required
           />
+
+          {/* Password */}
           <input
             type="password"
             placeholder="Password"
@@ -237,6 +215,8 @@ const ManageElection = () => {
             className="border p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
             required={!editingCandidate}
           />
+
+          {/* Year */}
           <input
             type="text"
             placeholder="Year"
@@ -244,6 +224,8 @@ const ManageElection = () => {
             onChange={(e) => setForm({ ...form, year: e.target.value })}
             className="border p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
           />
+
+          {/* Age */}
           <input
             type="number"
             placeholder="Age"
@@ -251,6 +233,8 @@ const ManageElection = () => {
             onChange={(e) => setForm({ ...form, age: e.target.value })}
             className="border p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
           />
+
+          {/* Gender */}
           <input
             type="text"
             placeholder="Gender"
@@ -258,6 +242,8 @@ const ManageElection = () => {
             onChange={(e) => setForm({ ...form, gender: e.target.value })}
             className="border p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
           />
+
+          {/* Manifesto */}
           <input
             type="text"
             placeholder="Manifesto (comma separated)"
@@ -265,6 +251,8 @@ const ManageElection = () => {
             onChange={(e) => setForm({ ...form, manifesto: e.target.value })}
             className="border p-3 rounded-lg focus:ring-2 focus:ring-blue-500 col-span-1 md:col-span-2"
           />
+
+          {/* Contact Email */}
           <input
             type="text"
             placeholder="Contact Email"
@@ -277,6 +265,8 @@ const ManageElection = () => {
             }
             className="border p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
           />
+
+          {/* Contact Phone */}
           <input
             type="text"
             placeholder="Contact Phone"
@@ -289,6 +279,27 @@ const ManageElection = () => {
             }
             className="border p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
           />
+
+          {/* Photo Upload */}
+          <div className="col-span-1 md:col-span-2">
+            <label className="block mb-2 font-medium text-gray-700">
+              Candidate Photo
+            </label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setForm({ ...form, photo: e.target.files[0] })}
+              className="border p-2 rounded-lg focus:ring-2 focus:ring-blue-500 w-full"
+            />
+            {form.photo && (
+              <img
+                src={URL.createObjectURL(form.photo)}
+                alt="Preview"
+                className="mt-2 w-28 h-28 rounded-full object-cover border-2 border-gray-300"
+              />
+            )}
+          </div>
+
           <button
             type="submit"
             className="bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition md:col-span-2"
@@ -305,6 +316,7 @@ const ManageElection = () => {
           <table className="w-full border-collapse rounded-lg overflow-hidden">
             <thead>
               <tr className="bg-gray-200 text-gray-700">
+                <th className="p-3 text-left">Photo</th>
                 <th className="p-3 text-left">Name</th>
                 <th className="p-3 text-left">Role</th>
                 <th className="p-3 text-left">Department</th>
@@ -318,6 +330,17 @@ const ManageElection = () => {
                   key={c._id}
                   className="hover:bg-gray-50 border-b transition"
                 >
+                  <td className="p-3">
+                    <img
+                      src={
+                        c.image_of_Candidate
+                          ? `http://localhost:5000${c.image_of_Candidate}`
+                          : "https://via.placeholder.com/50"
+                      }
+                      alt="Candidate"
+                      className="w-12 h-12 rounded-full object-cover border-2 border-gray-200"
+                    />
+                  </td>
                   <td className="p-3">
                     {c.name.firstName} {c.name.lastName}
                   </td>
@@ -338,12 +361,6 @@ const ManageElection = () => {
                   </td>
                   <td className="p-3 text-center flex gap-2 justify-center">
                     <button
-                      onClick={() => handleView(c._id)}
-                      className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
-                    >
-                      View
-                    </button>
-                    <button
                       onClick={() => handleEdit(c)}
                       className="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition"
                     >
@@ -360,7 +377,7 @@ const ManageElection = () => {
               ))}
               {candidates.length === 0 && (
                 <tr>
-                  <td colSpan="5" className="text-gray-500 p-4 text-center">
+                  <td colSpan="6" className="text-gray-500 p-4 text-center">
                     No candidates found
                   </td>
                 </tr>
@@ -369,24 +386,6 @@ const ManageElection = () => {
           </table>
         </div>
       </div>
-
-      {console.log(viewCandidate)}
-
-      {viewCandidate && (
-        <div className="fixed inset-0 bg-gray-900/60 flex justify-center items-center z-50">
-          <div className="relative w-[90%] h-full rounded-lg shadow-lg p-6 overflow-y-auto overflow-x-hidden bg-white">
-            {/* Close Button */}
-            <button
-              onClick={() => setViewCandidate(true)}
-              className="absolute top-4 right-4 text-gray-600 hover:text-red-600 text-2xl"
-            >
-              <FaTimes />
-            </button>
-
-            <CandidateA4Sheet candidate={viewCandidateId} />
-          </div>
-        </div>
-      )}
     </div>
   );
 };

@@ -8,6 +8,7 @@ import cors  from "cors"
 import path from "path"
 import { fileURLToPath } from "url";
 import candidateRoutes from "./routes/candidateRoutes.js"
+import announcement from "./routes/announcementRoutes.js"
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -31,6 +32,8 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Routes
 app.use("/api/candidates", candidateRoutes);
+app.use("/api/announcements", announcement);
+
 
 app.get('/',(req,res)=>{
   res.status(200).json({
